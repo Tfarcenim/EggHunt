@@ -32,11 +32,12 @@ public class ModBlockModelProvider extends BlockModelGenerators {
 
     @Override
     public void run() {
+        skipAutoItemBlock(ModBlocks.EASTER_EGG);
         createTrivialBlock1(ModBlocks.EASTER_EGG);
     }
 
     public void createTrivialBlock1(Block pBlock) {
-        ResourceLocation resourcelocation = TexturedModel.CUBE.create(pBlock, this.modelOutput);
+        ResourceLocation resourcelocation = new ResourceLocation(EggHunt.MOD_ID,"block/easter_egg");//TexturedModel.CUBE.create(pBlock, this.modelOutput);
         this.blockStateOutput.accept(createSimpleBlock1(pBlock, resourcelocation));
     }
 
