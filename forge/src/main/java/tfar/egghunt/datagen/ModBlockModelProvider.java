@@ -6,10 +6,7 @@ import net.minecraft.data.models.blockstates.BlockStateGenerator;
 import net.minecraft.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelTemplate;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +34,14 @@ public class ModBlockModelProvider extends BlockModelGenerators {
     }
 
     public void createTrivialBlock1(Block pBlock) {
-        ResourceLocation resourcelocation = new ResourceLocation(EggHunt.MOD_ID,"block/easter_egg");//TexturedModel.CUBE.create(pBlock, this.modelOutput);
+        //TexturedModel.CUBE.create(pBlock, this.modelOutput);
+
+        ResourceLocation resourcelocation = new ResourceLocation(EggHunt.MOD_ID,"block/easter_egg");
+        ModelTemplate template = create(resourcelocation,TextureSlot.ALL,TextureSlot.PARTICLE);
+        TexturedModel.Provider provider = TexturedModel.createDefault(pBlock1 ->
+                withTexture(new ResourceLocation(EggHunt.MOD_ID,"block/easter_egg1-1")), template);
+        provider.createWithSuffix(pBlock,"1-1",modelOutput);
+
         this.blockStateOutput.accept(createSimpleBlock1(pBlock, resourcelocation));
     }
 
