@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "egghunt:block/easter_egg1-1"
+      },
+      {
+        "model": "egghunt:block/easter_egg1-2"
+      }
+    ]
+  }
+}

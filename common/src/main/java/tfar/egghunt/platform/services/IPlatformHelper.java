@@ -1,5 +1,7 @@
 package tfar.egghunt.platform.services;
 
+import net.minecraft.core.Registry;
+
 public interface IPlatformHelper {
 
     /**
@@ -33,4 +35,8 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    <T extends Registry<? extends F>,F> void superRegister(Class<?> clazz, T registry, Class<F> filter);
+
+
 }
