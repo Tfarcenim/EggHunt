@@ -1,0 +1,7 @@
+{
+  "parent": "egghunt:block/easter_egg",
+  "textures": {
+    "all": "egghunt:block/easter_egg3-3",
+    "particle": "egghunt:block/easter_egg3-3"
+  }
+}
