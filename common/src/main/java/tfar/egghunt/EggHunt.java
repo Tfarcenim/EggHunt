@@ -1,5 +1,6 @@
 package tfar.egghunt;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tfar.egghunt.init.ModBlocks;
 import tfar.egghunt.init.ModItems;
+import tfar.egghunt.level.EggHuntData;
 import tfar.egghunt.platform.Services;
 
 // This class is part of the common project meaning it is shared between all supported loaders. Code written here can only
@@ -37,6 +39,14 @@ public class EggHunt {
     public static void serverTick(MinecraftServer server) {
         EggHuntData eggHuntData = EggHuntData.getInstance(server.overworld());
         eggHuntData.tick(server.overworld());
+    }
+
+    public static int[] from(BlockPos pos) {
+        return new int[]{pos.getX(),pos.getY(),pos.getZ()};
+    }
+
+    public static BlockPos to(int[] pos) {
+        return new BlockPos(pos[0],pos[1],pos[2]);
     }
 
 }

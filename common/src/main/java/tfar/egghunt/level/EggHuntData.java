@@ -1,4 +1,4 @@
-package tfar.egghunt;
+package tfar.egghunt.level;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +10,7 @@ import net.minecraft.server.bossevents.CustomBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import tfar.egghunt.EggHunt;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +22,24 @@ public class EggHuntData extends SavedData {
     private final CustomBossEvent customBossEvent = new CustomBossEvent(new ResourceLocation(EggHunt.MOD_ID,"egg_hunt"), Component.literal("Egg Hunt"));
     private int total_time;
     private int elapsed;
-    Map<UUID, BlockPos> originalPos = new HashMap<>();
+    Map<UUID,PlayerEggHuntData> playerData = new HashMap<>();
     private boolean active;
 
     @Override
     public CompoundTag save(CompoundTag var1) {
+        var1.putBoolean("active",active);
+        var1.putInt("total_time",total_time);
+        var1.putInt("elapsed",elapsed);
+
+        ListTag listTag = new ListTag();
+        for(Map.Entry<UUID,PlayerEggHuntData> entry : playerData.entrySet()) {
+            CompoundTag tag = new CompoundTag();
+            tag.putUUID("uuid",entry.getKey());
+            tag.put("player_data",entry.getValue().save());
+            listTag.add(tag);
+        }
+        var1.put("player_datas",listTag);
+
         return var1;
     }
 
@@ -34,14 +48,18 @@ public class EggHuntData extends SavedData {
         total_time = tag.getInt("total_time");
         elapsed = tag.getInt("elapsed");
 
-        ListTag posTag = tag.getList("original_pos",Tag.TAG_COMPOUND);
+        ListTag posTag = tag.getList("player_datas",Tag.TAG_COMPOUND);
         for (Tag tag1 : posTag) {
             CompoundTag compoundTag = (CompoundTag) tag1;
             UUID uuid = compoundTag.getUUID("uuid");
-            int[] pos = compoundTag.getIntArray("pos");
-            originalPos.put(uuid,new BlockPos(pos[0],pos[1],pos[2]));
+            PlayerEggHuntData playerEggHuntData = PlayerEggHuntData.load(compoundTag.getCompound("player_data"));
+            playerData.put(uuid,playerEggHuntData);
         }
 
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public void tick(ServerLevel level) {
@@ -55,17 +73,33 @@ public class EggHuntData extends SavedData {
         }
     }
 
+    public boolean discover(ServerPlayer player,BlockPos pos) {
+        PlayerEggHuntData playerEggHuntData = playerData.get(player.getUUID());
+
+        if (playerEggHuntData != null) {
+            boolean discover = playerEggHuntData.discover(pos);
+            if (discover) {
+                setDirty();
+            }
+            return discover;
+        } else {
+            return false;
+        }
+    }
+
     public void end(ServerLevel level) {
         active = false;
         customBossEvent.removeAllPlayers();
-        for (Map.Entry<UUID,BlockPos> entry : originalPos.entrySet()) {
+        for (Map.Entry<UUID, PlayerEggHuntData> entry : playerData.entrySet()) {
             UUID uuid = entry.getKey();
-            BlockPos pos = entry.getValue();
+            PlayerEggHuntData playerEggHuntData = entry.getValue();
             ServerPlayer player = level.getServer().getPlayerList().getPlayer(uuid);
             if (player != null) {
+                BlockPos pos = playerEggHuntData.getOriginalPos();
                 player.teleportTo(level,pos.getX(),pos.getY(),pos.getZ(),player.getYRot(),player.getXRot());
             }
         }
+        playerData.clear();
     }
 
     public void start(int ticks, BlockPos teleportTo, ServerLevel level) {
@@ -78,7 +112,7 @@ public class EggHuntData extends SavedData {
         List<ServerPlayer> players = level.players();
 
         for (ServerPlayer serverPlayer : players) {
-            originalPos.put(serverPlayer.getUUID(),serverPlayer.blockPosition());
+            playerData.put(serverPlayer.getUUID(),new PlayerEggHuntData(serverPlayer.blockPosition()));
             serverPlayer.teleportTo(level,teleportTo.getX(),teleportTo.getY(),teleportTo.getZ(),serverPlayer.getYRot(),serverPlayer.getXRot());
             customBossEvent.addPlayer(serverPlayer);
         }
