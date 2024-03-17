@@ -1,6 +1,7 @@
 package tfar.egghunt;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
@@ -32,4 +33,10 @@ public class EggHunt {
         // we have an interface in the common code and use a loader specific implementation to delegate our call to
         // the platform specific approach.
     }
+
+    public static void serverTick(MinecraftServer server) {
+        EggHuntData eggHuntData = EggHuntData.getInstance(server.overworld());
+        eggHuntData.tick(server.overworld());
+    }
+
 }
