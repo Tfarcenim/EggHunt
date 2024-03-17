@@ -2,7 +2,9 @@ package tfar.egghunt;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
@@ -39,6 +41,10 @@ public class EggHunt {
     public static void serverTick(MinecraftServer server) {
         EggHuntData eggHuntData = EggHuntData.getInstance(server.overworld());
         eggHuntData.tick(server.overworld());
+    }
+
+    public static MutableComponent getTabName(Player player) {
+        return null;
     }
 
     public static int[] from(BlockPos pos) {
