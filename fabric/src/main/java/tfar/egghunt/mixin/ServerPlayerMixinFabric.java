@@ -35,7 +35,7 @@ public class ServerPlayerMixinFabric implements ServerPlayerDuckFabric {
     }
 
     /**
-     * Force the name displayed in the tab list to refresh, by firing {@link net.minecraftforge.event.entity.player.PlayerEvent.TabListNameFormat}.
+     * Force the name displayed in the tab list to refresh.
      */
     @Override
     public void refreshTabListName() {
