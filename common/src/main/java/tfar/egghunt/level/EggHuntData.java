@@ -5,7 +5,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.bossevents.CustomBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,10 +15,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import tfar.egghunt.EggHunt;
 import tfar.egghunt.platform.Services;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class EggHuntData extends SavedData {
 
@@ -97,6 +96,9 @@ public class EggHuntData extends SavedData {
     public void end(ServerLevel level) {
         active = false;
         customBossEvent.removeAllPlayers();
+
+        List<Component> leaderboard = compileLeaderBoard(level);
+
         for (Map.Entry<UUID, PlayerEggHuntData> entry : playerData.entrySet()) {
             UUID uuid = entry.getKey();
             PlayerEggHuntData playerEggHuntData = entry.getValue();
@@ -104,9 +106,38 @@ public class EggHuntData extends SavedData {
             if (player != null) {
                 BlockPos pos = playerEggHuntData.getOriginalPos();
                 player.teleportTo(level,pos.getX(),pos.getY(),pos.getZ(),player.getYRot(),player.getXRot());
+
+                for (Component component : leaderboard) {
+                    player.sendSystemMessage(component);
+                }
+
+                Services.PLATFORM.refreshTabListName(player);
             }
         }
         playerData.clear();
+    }
+
+    public List<Component> compileLeaderBoard(ServerLevel level) {
+        List<Component> components = new ArrayList<>();
+
+        List<ServerPlayer> players = new ArrayList<>(level.players());
+
+        //o1 < o2 return negative
+        players.sort((o1, o2) -> {
+            int eggs1 = EggHuntData.this.foundEggs(o1);
+            int eggs2 = EggHuntData.this.foundEggs(o2);
+
+            if (eggs1 < eggs2) return -1;
+            else if (eggs1 > eggs2) return 1;
+
+            return 0;
+        });
+
+        for (ServerPlayer serverPlayer : players) {
+            components.add(((MutableComponent)serverPlayer.getDisplayName()).append(" "+foundEggs(serverPlayer)+" eggs"));
+        }
+
+        return components;
     }
 
     public void start(int ticks, BlockPos teleportTo, ServerLevel level) {
