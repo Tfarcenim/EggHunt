@@ -48,6 +48,17 @@ subprojects {
             name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
             url = 'https://maven.blamejared.com'
         }
+
+        maven {
+            url "https://maven.shedaniel.me"
+            content {
+                includeGroup "me.shedaniel.cloth.api"
+                includeGroup "me.sargunvohra.mcmods"
+                includeGroup "me.shedaniel.cloth"
+                includeGroup "me.shedaniel"
+                includeGroup "dev.architectury"
+            }
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {
