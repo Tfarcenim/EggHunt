@@ -32,6 +32,10 @@ public class PlayerEggHuntData {
         return foundEggs.add(pos);
     }
 
+    public int getFound() {
+        return foundEggs.size();
+    }
+
     public CompoundTag save() {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putIntArray("original_pos", EggHunt.from(originalPos));

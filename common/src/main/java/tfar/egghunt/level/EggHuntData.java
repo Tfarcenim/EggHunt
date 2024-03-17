@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 import tfar.egghunt.EggHunt;
+import tfar.egghunt.platform.Services;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +63,11 @@ public class EggHuntData extends SavedData {
         return active;
     }
 
+    public int foundEggs(ServerPlayer player) {
+        PlayerEggHuntData playerEggHuntData = playerData.get(player.getUUID());
+        return playerEggHuntData == null ? 0 : playerEggHuntData.getFound();
+    }
+
     public void tick(ServerLevel level) {
         if (active) {
             elapsed++;
@@ -79,6 +85,7 @@ public class EggHuntData extends SavedData {
         if (playerEggHuntData != null) {
             boolean discover = playerEggHuntData.discover(pos);
             if (discover) {
+                Services.PLATFORM.refreshTabListName(player);
                 setDirty();
             }
             return discover;
@@ -115,6 +122,7 @@ public class EggHuntData extends SavedData {
             playerData.put(serverPlayer.getUUID(),new PlayerEggHuntData(serverPlayer.blockPosition()));
             serverPlayer.teleportTo(level,teleportTo.getX(),teleportTo.getY(),teleportTo.getZ(),serverPlayer.getYRot(),serverPlayer.getXRot());
             customBossEvent.addPlayer(serverPlayer);
+            Services.PLATFORM.refreshTabListName(serverPlayer);
         }
 
         setDirty();

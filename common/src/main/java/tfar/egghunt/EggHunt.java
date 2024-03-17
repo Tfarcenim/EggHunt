@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -44,6 +45,12 @@ public class EggHunt {
     }
 
     public static MutableComponent getTabName(Player player) {
+        EggHuntData eggHuntData = EggHuntData.getInstance(player.getServer().overworld());
+        if (eggHuntData.isActive()) {
+            int eggcount = eggHuntData.foundEggs((ServerPlayer) player);
+            return ((MutableComponent) player.getDisplayName()).append(" ["+eggcount+"]");
+        }
+
         return null;
     }
 

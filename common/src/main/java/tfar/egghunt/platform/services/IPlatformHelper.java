@@ -1,6 +1,7 @@
 package tfar.egghunt.platform.services;
 
 import net.minecraft.core.Registry;
+import net.minecraft.server.level.ServerPlayer;
 
 public interface IPlatformHelper {
 
@@ -37,6 +38,8 @@ public interface IPlatformHelper {
     }
 
     <T extends Registry<? extends F>,F> void superRegister(Class<?> clazz, T registry, Class<F> filter);
+
+    void refreshTabListName(ServerPlayer player);
 
 
 }

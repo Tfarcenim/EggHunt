@@ -2,7 +2,9 @@ package tfar.egghunt.platform;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import tfar.egghunt.EggHunt;
+import tfar.egghunt.duck.ServerPlayerDuckFabric;
 import tfar.egghunt.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -40,5 +42,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public boolean isDevelopmentEnvironment() {
 
         return FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
+
+    @Override
+    public void refreshTabListName(ServerPlayer player) {
+        ((ServerPlayerDuckFabric)player).refreshTabListName();
     }
 }

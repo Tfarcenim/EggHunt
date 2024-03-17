@@ -5,15 +5,15 @@ import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tfar.egghunt.EggHunt;
-import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import tfar.egghunt.EggHunt;
 import tfar.egghunt.duck.ServerPlayerDuckFabric;
+
+import java.util.Objects;
 
 @Mixin(ServerPlayer.class)
 public class ServerPlayerMixinFabric implements ServerPlayerDuckFabric {
@@ -23,7 +23,7 @@ public class ServerPlayerMixinFabric implements ServerPlayerDuckFabric {
     private boolean hasTabListName = false;
     private Component tabListDisplayName = null;
 
-    @Inject(method = "getTabListDisplayName", at = @At("HEAD"))
+    @Inject(method = "getTabListDisplayName", at = @At("HEAD"), cancellable = true)
     private void init(CallbackInfoReturnable<Component> cir) {
         if (!this.hasTabListName) {
             this.tabListDisplayName = EggHunt.getTabName((ServerPlayer)(Object)this);
@@ -41,7 +41,7 @@ public class ServerPlayerMixinFabric implements ServerPlayerDuckFabric {
     public void refreshTabListName() {
         Component oldName = this.tabListDisplayName;
         this.tabListDisplayName = EggHunt.getTabName((ServerPlayer)(Object)this);
-        if (!java.util.Objects.equals(oldName, this.tabListDisplayName)) {
+        if (!Objects.equals(oldName, this.tabListDisplayName)) {
             this.server.getPlayerList().broadcastAll(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,(ServerPlayer) (Object)this));
         }
     }
