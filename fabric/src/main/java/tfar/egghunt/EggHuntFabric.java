@@ -9,6 +9,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import tfar.egghunt.config.EggHuntClothConfig;
 
@@ -30,6 +33,7 @@ public class EggHuntFabric implements ModInitializer {
 
         // Use Fabric to bootstrap the Common mod.
         EggHunt.init();
+        Registry.register(BuiltInRegistries.SOUND_EVENT,new ResourceLocation(EggHunt.MOD_ID,"joe"),EggHunt.JOE);
     }
 
     private void serverTick(MinecraftServer server) {

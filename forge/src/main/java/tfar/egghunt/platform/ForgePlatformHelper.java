@@ -3,6 +3,7 @@ package tfar.egghunt.platform;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.lang3.tuple.Pair;
 import tfar.egghunt.EggHunt;
 import tfar.egghunt.EggHuntForge;
@@ -50,6 +51,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
                 illegalAccessException.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void refreshTabListName(ServerPlayer player) {
+
     }
 
 }

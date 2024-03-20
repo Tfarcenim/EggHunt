@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
           "tfar.egghunt.EggHuntFabric"
+        ],
+        "client": [
+            "tfar.egghunt.client.EggHuntClientFabric"
         ]
     },
     "mixins": [

@@ -1,6 +1,8 @@
 package tfar.egghunt;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
@@ -50,6 +52,7 @@ public class EggHuntForge {
                 e.register((ResourceKey<? extends Registry<Object>>)registry.key(),pair.getLeft(),(Supplier<Object>)pair.getValue());
             }
         }
+        e.register(Registries.SOUND_EVENT,new ResourceLocation(EggHunt.MOD_ID,"joe"),() -> EggHunt.JOE);
     }
 
     public void changePlayerName(PlayerEvent.TabListNameFormat event) {

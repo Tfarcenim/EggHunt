@@ -24,4 +24,6 @@ public class ModItems {
     public static final Item EASTER_EGG4_3 = new BlockItem(ModBlocks.EASTER_EGG4_3,new Item.Properties());
     public static final Item EASTER_EGG4_4 = new BlockItem(ModBlocks.EASTER_EGG4_4,new Item.Properties());
     public static final Item EASTER_EGG4_5 = new BlockItem(ModBlocks.EASTER_EGG4_5,new Item.Properties());
+    public static final Item EASTER_EGG5 = new BlockItem(ModBlocks.EASTER_EGG5,new Item.Properties());
+
 }

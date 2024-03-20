@@ -1,4 +1,4 @@
-// 1.20.1	2024-03-16T20:05:13.8962871	Model Definitions
+// 1.20.1	2024-03-20T16:08:05.5342396	Model Definitions
 a261e52d169154b3496aaa3aa2614753c420e530 assets/egghunt/blockstates/easter_egg1_1.json
 508eaf3a36a4339189857df8af69f7fdc0544a05 assets/egghunt/blockstates/easter_egg1_2.json
 9de7b59de0aab9ed0d905c9a2c0776e0f883f1e4 assets/egghunt/blockstates/easter_egg1_3.json
@@ -61,3 +61,4 @@ db91256367a30b57dae1601ac5e11e2368e6d1b7 assets/egghunt/models/item/easter_egg2_
 ce95c46a025bc2dc752a4ed293b8b92fc9260509 assets/egghunt/models/item/easter_egg4_3.json
 bf40fc886109d76f06260cabd35bd8bc66aba0bf assets/egghunt/models/item/easter_egg4_4.json
 b08c7a8856cfc86800be9a8156293659ab13c699 assets/egghunt/models/item/easter_egg4_5.json
+197ac9430a568a727c101757bca0d374e9f20dd9 assets/egghunt/models/item/easter_egg5.json
